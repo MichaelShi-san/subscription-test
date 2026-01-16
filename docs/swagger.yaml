@@ -1,0 +1,55 @@
+openapi: 3.0.3
+info:
+  title: Subscription Service API
+  version: 1.0.0
+  description: REST API для управления онлайн-подписками пользователей
+servers:
+  - url: http://localhost:8080
+paths:
+  /subscriptions:
+    post:
+      summary: Создать новую подписку
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubscriptionInput"
+      responses:
+        "201":
+          description: Подписка успешно создана
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Subscription"
+        "400":
+          description: Некорректный запрос
+    get:
+      summary: Список подписок с фильтром
+      parameters:
+        - in: query
+          name: user_id
+          schema:
+            type: string
+            format: uuid
+          description: Фильтр по пользователю
+        - in: query
+          name: service_name
+          schema:
+            type: string
+          description: Фильтр по названию сервиса
+      responses:
+        "200":
+          description: Список подписок
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Subscription"
+  /subscriptions/{id}:
+    get:
+      summary: Получить подписку по ID
+      parameters:
+        - in: path
+          name: id
